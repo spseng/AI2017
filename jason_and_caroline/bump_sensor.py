@@ -26,6 +26,7 @@ class SquareBot():
             if self.bump_sensor.is_on():
                 self.back_and_turn()
 
+            print("I was here!")
             sys.sleep(1)
 
     def back_and_turn(self):
