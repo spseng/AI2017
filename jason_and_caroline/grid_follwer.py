@@ -2,6 +2,7 @@
 
 import sys
 import vex
+import timer
 
 class Vector():
     """Simple vector with x and y components"""
@@ -42,7 +43,11 @@ class GridFollower():
         self.square = Vector(0, 0)
 
         # Going to the right
+
         self.direction = Vector(1, 0)
+
+        # Class timer object
+        self.timer = timer.Timer()
 
     def lcd_print(self, content):
         """Helper Function
@@ -84,7 +89,19 @@ class GridFollower():
             self.state = "forward"
         elif self.state == "done":
             self.stop()
-            
+    
+    def print_sensor_val(self):
+        """Prints out sensor values on the lcd screen
+        
+        Uses a timing method that doesn't block other functionality
+        """
+        print_objects = ["left",
+                         str(self.lline_track.line_tracker_percent()),
+                         "right",
+                         str(self.rline_track.line_tracker_percent())]
+        index = int(self.timer.elapsed_time()) % 4
+        lcd_print(print_objects[index])
+
     def sense(self):
         if self.lline_track.line_tracker_percent() > 70:
             lon_tape = True
@@ -93,8 +110,11 @@ class GridFollower():
             ron_tape = True
     
     def loop(self):
-        pass
+        sense()
+        print_sensor_val()
+        execute_state()
 
 bot = GridFollower()
+bot.timer.start()
 while True:
     bot.loop()
