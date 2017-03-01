@@ -33,6 +33,9 @@ class GridFollower():
         self.serial = vex.Serial(1, 9600)
         self.serial.write("begin")
 
+        # Default power
+        self.TOTAL_POWER = 60
+
         # State can be one of [forward, on_tape, off_tape]
         self.state = "forward"
         
@@ -43,7 +46,6 @@ class GridFollower():
         self.square = Vector(0, 0)
 
         # Going to the right
-
         self.direction = Vector(1, 0)
 
         # Class timer object
@@ -56,17 +58,30 @@ class GridFollower():
         self.serial.write(content)
 
     def turn_left(self):
-        pass
+        self.direction.x = 0
+        self.direction.y = 1
+        
+        # Motor turning
+        self.left_wheels.run(30)
+        self.right_wheels.run(80)
+        sys.sleep(1)
 
     def turn_right(self):
-        pass
+        self.direction.x = 0
+        self.direction.y = 1
+        
+        # Motor turning
+        self.left_wheels.run(80)
+        self.right_wheels.run(30)
+        sys.sleep(1)
     
     def forward(self):
-        pass
+        self.left_wheels.run(self.TOTAL_POWER)
+        self.right_wheels.run(self.TOTAL_POWER)
 
     def stop(self):
-        self.left_wheels.stop()
-        self.right_wheels.stop()
+        self.left_wheels.off()
+        self.right_wheels.off()
     
     def execute_state(self):
         if self.state == "forward":
@@ -111,7 +126,7 @@ class GridFollower():
     
     def loop(self):
         sense()
-        print_sensor_val()
+        # print_sensor_val()
         execute_state()
 
 bot = GridFollower()
