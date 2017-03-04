@@ -44,6 +44,7 @@ class GridFollower():
 
         # Keep track of coordinates
         self.square = Vector(0, 0)
+        self.lcd_print(self.square)
 
         # Going to the right
         self.direction = Vector(1, 0)
@@ -86,11 +87,11 @@ class GridFollower():
     def execute_state(self):
         if self.state == "forward":
             self.forward()
-            if lon_tape and ron_tape:
+            if self.lon_tape and self.ron_tape:
                 self.state = "on_tape"
         elif self.state == "on_tape":
             self.forward()
-            if not lon_tape and not ron_tape:
+            if not self.lon_tape and not self.ron_tape:
                 self.state = "off_tape"
         elif self.state == "off_tape":
             if self.square.x > 2:
